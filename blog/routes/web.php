@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,23 @@ Route::get('/', function () {
     $links = \App\Link::all();
     return view('welcome',['links' => $links]);
 });
+
+Route::get('/insert_links',function (){
+    return view('insert_links');
+});
+
+Route::post('/link_submit', function (Request $request) {
+    $data = $request->validate([
+        'title' => 'required|max:255',
+        'url' => 'required|url|max:255',
+        'description' => 'required|max:255',
+    ]);
+
+    $link = tap(new App\Link($data))->save();
+
+    return redirect('/');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

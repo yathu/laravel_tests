@@ -30,7 +30,13 @@ Route::post('/link_submit', function (Request $request) {
         'description' => 'required|max:255',
     ]);
 
-    $link = tap(new App\Link($data))->save();
+    $link = new \App\Link;
+    $link->title = $data['title'];
+    $link->url = $data['url'];
+    $link->description = $data['description'];
+
+// Save the model
+    $link->save();
 
     return redirect('/');
 });
